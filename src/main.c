@@ -776,8 +776,11 @@ int main (int argc, char** argv) {
 
     gettimeofday(&etv, NULL);
 
+    long part2_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
+
     print_result(prob, result, p);
     printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
+    printf("Time2: %ld microseconds\n", part2_time);
 
     free(prob);
     free(result);
