@@ -697,10 +697,8 @@ int main (int argc, char** argv) {
     }
 
     k = atoi(argv[1]);
-    //printf("k=%d\n", k);
 
     p = atoi(argv[2]);
-    //printf("p=%d\n", p);
     
     int i;
     for (i = 0; i < mxlevel; ++i) {
@@ -747,12 +745,32 @@ int main (int argc, char** argv) {
 
     struct timeval stv;
     struct timeval etv;
-    gettimeofday(&stv, NULL);
+    // gettimeofday(&stv, NULL);
 
     if (mxlevel == 3 && f[0] == 9 && f[1] == 5 && f[2] == 9) {
-        //printf("Go to hardcode version.\n");
-        prob_hardcode(prob, result, p);
+        int mode;
+        printf("\n\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
+        scanf("%d", &mode);
+        while (mode >= 3 && mode <= 0) {
+            printf("\nInvalid input, choose either 1 or 2.\n");
+            printf("\n\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
+            scanf("%d", &mode);
+        }
+        switch(mode) {
+            case 1:
+                printf("\nGo to hardcoded version.\n");
+                gettimeofday(&stv, NULL);
+                prob_hardcode(prob, result, p);
+                break;
+            case 2:
+                printf("\nGo to non-hardcoded version.\n");
+                gettimeofday(&stv, NULL);
+                prob_sse(prob, result, p, f, maxlevel);
+                break;
+        }
+        
     } else {
+        gettimeofday(&stv, NULL);
         prob_sse(prob, result, p, f, mxlevel);
     }
 
