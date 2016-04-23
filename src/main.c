@@ -679,6 +679,7 @@ void print_result(int32_t* prob, int32_t* result, int plen) {
     for (i = 0; i < plen; ++i) {
         printf("%d %d\n", prob[i], result[i]);
     }
+    printf("\n");
 }
 
 int main (int argc, char** argv) {
@@ -738,8 +739,13 @@ int main (int argc, char** argv) {
     //print_tree(mxlevel);
 
     int32_t* prob = gen_rnd_array(p);
-    int32_t* result = NULL;
-    if (posix_memalign((void**)&result, 16, sizeof(int32_t) * p) != 0) {
+    int32_t* part1_result = NULL;
+    int32_t* part2_result = NULL;
+
+    if (posix_memalign((void**)&part1_result, 16, sizeof(int32_t) * p) != 0) {
+        return -1;
+    }
+    if (posix_memalign((void**)&part2_result, 16, sizeof(int32_t) * p) != 0) {
         return -1;
     }
 
@@ -752,20 +758,18 @@ int main (int argc, char** argv) {
 
     // part1: using binary search to probe
     gettimeofday(&stv, NULL);
-    prob_binary(prob, result, p, f, mxlevel);
+    prob_binary(prob, part1_result, p, f, mxlevel);
     gettimeofday(&etv, NULL);
 
     part1_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
 
-    print_result(prob, result, p);
+    //print_result(prob, part1_result, p);
 
-    // free the result from part1
-    free(result);
 
     // part2: using Intel's SSE instruction set to probe
     if (mxlevel == 3 && f[0] == 9 && f[1] == 5 && f[2] == 9) {
         int mode;
-        printf("\n\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
+        printf("\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
         scanf("%d", &mode);
         while (mode >= 3 && mode <= 0) {
             printf("\nInvalid input, choose either 1 or 2.\n");
@@ -776,20 +780,20 @@ int main (int argc, char** argv) {
             case 1:
                 printf("\nGo to hardcoded version.\n");
                 gettimeofday(&stv, NULL);
-                prob_hardcode(prob, result, p);
+                prob_hardcode(prob, part2_result, p);
                 gettimeofday(&etv, NULL);
                 break;
             case 2:
                 printf("\nGo to non-hardcoded version.\n");
                 gettimeofday(&stv, NULL);
-                prob_sse(prob, result, p, f, mxlevel);
+                prob_sse(prob, part2_result, p, f, mxlevel);
                 gettimeofday(&etv, NULL);
                 break;
         }
         
     } else {
         gettimeofday(&stv, NULL);
-        prob_sse(prob, result, p, f, mxlevel);
+        prob_sse(prob, part2_result, p, f, mxlevel);
         gettimeofday(&etv, NULL);
     }
 
@@ -797,13 +801,23 @@ int main (int argc, char** argv) {
 
     part2_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
 
-    print_result(prob, result, p);
-    //printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
+    //print_result(prob, part2_result, p);
+
+    printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
     printf("Part1 time: %ld microseconds\n", part1_time);
     printf("Part2 time: %ld microseconds\n", part2_time);
 
+    if (part1_time > part2_time) {
+	printf("\nPart2 is faster than part1 with %ld microseconds.\n\n", part1_time - part2_time);
+    } else if (part1_time < part2_time) {
+	printf("\nPart1 is faster than part2 with %ld microseconds.\n\n", part2_time - part1_time);
+    } else {
+	printf("\nPart1 costs the same time as part2.\n\n");
+    }
+
     free(prob);
-    free(result);
+    free(part1_result);
+    free(part2_result);
     free(f);
 
     for (i = 0; i < mxlevel; ++i) {
