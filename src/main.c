@@ -750,7 +750,7 @@ int main (int argc, char** argv) {
     gettimeofday(&stv, NULL);
 
     if (mxlevel == 3 && f[0] == 9 && f[1] == 5 && f[2] == 9) {
-        printf("Go to hardcode version.\n");
+        //printf("Go to hardcode version.\n");
         prob_hardcode(prob, result, p);
     } else {
         prob_sse(prob, result, p, f, mxlevel);
