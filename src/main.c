@@ -745,8 +745,24 @@ int main (int argc, char** argv) {
 
     struct timeval stv;
     struct timeval etv;
+
+    long part1_time;
+    long part2_time;
     // gettimeofday(&stv, NULL);
 
+    // part1: using binary search to probe
+    gettimeofday(&stv, NULL);
+    prob_binary(prob, result, p, f, mxlevel);
+    gettimeofday(&etv, NULL);
+
+    part1_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
+
+    print_result(prob, result, p);
+
+    // free the result from part1
+    free(result);
+
+    // part2: using Intel's SSE instruction set to probe
     if (mxlevel == 3 && f[0] == 9 && f[1] == 5 && f[2] == 9) {
         int mode;
         printf("\n\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
@@ -761,22 +777,25 @@ int main (int argc, char** argv) {
                 printf("\nGo to hardcoded version.\n");
                 gettimeofday(&stv, NULL);
                 prob_hardcode(prob, result, p);
+                gettimeofday(&etv, NULL);
                 break;
             case 2:
                 printf("\nGo to non-hardcoded version.\n");
                 gettimeofday(&stv, NULL);
                 prob_sse(prob, result, p, f, mxlevel);
+                gettimeofday(&etv, NULL);
                 break;
         }
         
     } else {
         gettimeofday(&stv, NULL);
         prob_sse(prob, result, p, f, mxlevel);
+        gettimeofday(&etv, NULL);
     }
 
-    gettimeofday(&etv, NULL);
+    // gettimeofday(&etv, NULL);
 
-    long part2_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
+    part2_time = (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec - stv.tv_usec);
 
     print_result(prob, result, p);
     printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
