@@ -765,7 +765,7 @@ int main (int argc, char** argv) {
             case 2:
                 printf("\nGo to non-hardcoded version.\n");
                 gettimeofday(&stv, NULL);
-                prob_sse(prob, result, p, f, maxlevel);
+                prob_sse(prob, result, p, f, mxlevel);
                 break;
         }
         
