@@ -66,7 +66,8 @@ int32_t* gen_rnd_array(int arrlen) {
     int32_t *tmp = generate(arrlen, gen);
 
     posix_memalign((void**)&a, 16, sizeof(int) * arrlen);
-    for (int i = 0; i < arrlen; ++i) {
+    int i;
+    for (i = 0; i < arrlen; ++i) {
         a[i] = tmp[i];
     }
 
@@ -84,7 +85,9 @@ int32_t* gen_rnd_array_sn(int arrlen) {
     int32_t *tmp = generate_sorted_unique(arrlen, gen);
 
     posix_memalign((void**)&a, 16, sizeof(int) * arrlen);
-    for (int i = 0; i < arrlen; ++i) {
+
+    int i;
+    for (i = 0; i < arrlen; ++i) {
         a[i] = tmp[i];
     }
 
