@@ -12,7 +12,7 @@
 #include <tmmintrin.h>
 #include <smmintrin.h>
 #include <nmmintrin.h>
-#include <ammintrin.h>
+//#include <ammintrin.h>
 #include <x86intrin.h>
 
 static int32_t** tree = NULL;
@@ -771,7 +771,7 @@ int main (int argc, char** argv) {
         int mode;
         printf("\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
         scanf("%d", &mode);
-        while (mode >= 3 && mode <= 0) {
+        while (mode >= 3 || mode <= 0) {
             printf("\nInvalid input, choose either 1 or 2.\n");
             printf("\n\n1 -> hardcoded mode\n2 -> non-hardcoded mode\nPlease choose mode: ");
             scanf("%d", &mode);
