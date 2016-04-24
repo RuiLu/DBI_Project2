@@ -781,13 +781,13 @@ int main (int argc, char** argv) {
         }
         switch(mode) {
             case 1:
-                printf("\nGo to hardcoded version.\n");
+                printf("\nGo to hardcoded version.\n\n");
                 gettimeofday(&stv, NULL);
                 prob_hardcode(prob, part2_result, p);
                 gettimeofday(&etv, NULL);
                 break;
             case 2:
-                printf("\nGo to non-hardcoded version.\n");
+                printf("\nGo to non-hardcoded version.\n\n");
                 gettimeofday(&stv, NULL);
                 prob_sse(prob, part2_result, p, f, mxlevel);
                 gettimeofday(&etv, NULL);
@@ -806,7 +806,7 @@ int main (int argc, char** argv) {
 
     //print_result(prob, part2_result, p);
 
-    printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
+    //printf("\n\nTime: %ld microseconds\n", (etv.tv_sec-stv.tv_sec) * 1000000L + (etv.tv_usec-stv.tv_usec));
     printf("Part1 time: %ld microseconds\n", part1_time);
     printf("Part2 time: %ld microseconds\n", part2_time);
 
